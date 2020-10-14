@@ -1,0 +1,922 @@
+
+
+ 
+博客 
+学院 
+下载
+论坛
+问答
+直播
+招聘
+VIP会员
+
+ 
+
+创作中心 
+
+
+
+ 
+傲决流云 
+码龄4年
+暂无认证
+28
+原创
+46
+粉丝
+53
+获赞
+15
+评论
+5万+
+访问
+
+722
+积分
+146
+收藏
+10万+
+周排名
+11万+
+总排名
+ 
+等级
+ 
+TA的主页
+私信
+关注
+
+ 
+
+
+最新文章
+正则表达式入门 
+The Linux Command Line 
+Python入门 
+【write a toy cpu】实现 
+【write a toy cpu】环境搭建 
+归档
+2018
+7月
+1篇
+6月
+3篇
+5月
+2篇
+4月
+3篇
+3月
+7篇
+2月
+3篇
+1月
+1篇
+2017
+12月
+1篇
+11月
+3篇
+10月
+2篇
+9月
+1篇
+8月
+1篇
+热门文章
+几个好玩有趣的Python入门实例 29123 
+常用数据结构——队列及其应用 7570 
+【离散数学】逻辑与证明 4253 
+写一个简单的C++控制台游戏——扫雷 2916 
+高效排序算法——希尔排序、堆排序、归并排序、快速排序 2700 
+最新评论
+【write a toy cpu】... 
+weixin_45314836：真的是太谢谢了 
+【离散数学】高级计数技术 
+qq_35527032：[reply]weixin_45366241[/reply] 看的真仔细，已改正 
+【离散数学】高级计数技术 
+weixin_45366241：你好，文章写的很棒，不过容斥原理公式好像写错了呢？最后应该是-1的n+1次方 
+【离散数学】高级计数技术 
+qq_37375427：请问你大几？ 
+写一个简单的C++控制台游戏——扫雷 
+weixin_43686552：还需要添加什么文件呢？ 
+几个好玩有趣的Python入门实例
+ 
+傲决流云 2018-07-12 21:57:07  29182  收藏 84 
+分类专栏： 编程语言 
+版权 
+几个简单的Python实例，好玩有趣，基础语法。
+turtle库开始自己的绘画
+写一个属于自己的文本进度条
+蒙特卡洛方法计算π
+分形几何，Koch雪花曲线
+输入一组数据，进行简单的统计
+小说词频统计，统计三国演义中谁出场率最高
+轻松抓住文本主旨：文本词云生成
+drawing with turtle
+好玩有趣，入门级绘图库turtle，文档在此。
+文档中的实例：太阳花。
+from turtle import *
+color('red', 'yellow')
+begin_fill()
+while True:
+    forward(200)
+    left(170)
+    if abs(pos()) < 1:
+        break
+end_fill()
+done()
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+画一个六芒星：
+import turtle as t
+
+# size传入最大的圆的半径
+def draw_Star(size):
+    t.setup(1200, 1000)
+    t.speed(11)
+    t.pensize(2)
+    t.pencolor('grey')
+    for r, pen_size in [(size//7, 3), (size*6//7, 4), (size, 4)]:
+        t.penup()
+        t.goto(0, -r)
+        t.pendown()
+        t.pensize(pen_size)
+        t.circle(r)
+        t.penup()
+        t.goto(0, 0)
+    r = size * 5.5 // 7
+    for i in range(6):
+        t.pendown()
+        t.pensize(3)
+        t.seth(i * 60 + 30)
+        t.fd(r)
+        t.goto(0, 0)
+    t.goto(0, r)
+    t.seth(-150)
+    t.pensize(5)
+    for i in range(6):
+        t.fd(r)
+        t.left(60)
+    r = r - size // 50
+    t.goto(0, r)
+    t.pensize(10)
+    t.seth(-120)
+    t.pencolor('orange')
+    for i in range(3):
+        t.fd(r * (3**0.5))
+        t.left(120)
+    t.penup()
+    t.goto(0, 0)
+    t.seth(30)
+    t.fd(r)
+    t.seth(-180)
+    t.pendown()
+    for i in range(3):
+        t.fd(r * (3 ** 0.5))
+        t.left(120)
+    t.hideturtle()
+    t.done()
+
+draw_Star(400)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+
+文本进度条
+不停向下打印的版本：
+import time
+
+def bar(scale):
+    print('===========执行开始============')
+    for i in range(scale + 1):
+        a = '*' * i
+        b = '.' * (scale - i)
+        c = (i / scale) * 100
+        print('\r{:^3.0f}%[{}->{}]'.format(c, a, b), end = '')
+        time.sleep(0.05)
+    print('\n===========执行结束============')
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+单行刷新版本：
+import time
+
+def pro_bar(scale):
+    print('执行开始'.center(scale // 2, '='))
+    start = time.perf_counter()
+    for i in range(scale + 1):
+        a = '*' * i
+        b = '.' * (scale - i)
+        c = (i / scale) * 100
+        dur = time.perf_counter() - start
+        print('\r{:^3.0f}%[{}->{}] {:.2f}s'.format(c, a, b, dur), end = '')
+        time.sleep(0.05)
+    print('\n' + '执行结束'.center(scale // 2, '='))
+
+pro_bar(50)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+单行刷新效果在cmd窗口中运行才有效，IDLE禁\r转义字符。
+蒙特卡洛方法计算π
+随机数生成使用random库，文档在此。思路即是随机生成点，落在正方形内。计算正方形内的圆内落点与正方形内落点之比，近似为面积之比，随机数越随机，数量越大越准确。
+from random import random
+from time import perf_counter
+
+def calPI(N = 100):
+    hits = 0
+    start = perf_counter()
+    for i in range(1, N*N+1):
+        x, y = random(), random()
+        dist = pow(x ** 2 + y ** 2, 0.5)
+        if dist <= 1.0:
+            hits += 1
+    pi = (hits * 4) / (N * N)
+    use_time = perf_counter() - start
+    return pi, use_time
+
+PI, use_time = calPI(1000)
+print('\nuse Monte Carlo method to calculate PI: {}'.format(PI))
+print('use time: {} s'.format(use_time))
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+递归绘制Koch雪花曲线
+koch雪花曲线是分形几何中的一个经典曲线。
+使用turtle库，简单的递归即可绘制。
+import turtle
+
+def koch(size, n):
+    if n == 0:
+        turtle.fd(size)
+    else:
+        for angle in [0, 60, -120, 60]:
+            turtle.left(angle)
+            koch(size/3, n-1)
+
+def main():
+    turtle.setup(1200, 1000)
+    turtle.speed(11)
+    turtle.penup()
+    turtle.goto(-300, 200)
+    turtle.pendown()
+    turtle.pensize(2)
+    level = 4
+    koch(600, level)  # 3阶科赫曲线
+    turtle.right(120)
+    koch(600, level)
+    turtle.right(120)
+    koch(600, level)
+    turtle.hideturtle()
+    turtle.done()
+
+main()
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+level为4的Koch雪花如下： 
+
+分形几何真有趣！
+Koch曲线形成过程（来自Matrix67）： 
+
+将上述的三角形换为正方形，稍微变换一下。
+
+简单统计
+输入一组数据，计算均值，方差，中位数，绝对相对误差。
+# -*- coding: utf-8 -*-
+
+# 输入数据
+def getNum():
+    nums = []
+    iNumStr = input('please input a sequence of numbers (enter to exit): ')
+    while iNumStr != '':
+        nums.append(eval(iNumStr))
+        iNumStr = input('please input a sequence of numbers (enter to exit): ')
+    return nums
+
+# 平均数
+def average(numbers):
+    return sum(numbers) / len(numbers)
+
+# 标准差
+def dev(numbers, average):
+    sdev = 0.0
+    for num in numbers:
+        sdev += (num - average) ** 2
+    return pow(sdev / len(numbers), 0.5)
+
+# 中位数
+def median(numbers):
+    sorted(numbers)
+    size = len(numbers)
+    if size % 2 == 0:
+        return (numbers[size//2-1] + numbers[size//2]) / 2
+    else:
+        return numbers[size//2]
+
+# 绝对与相对误差
+def rel_dev(numbers, average):
+    _max = max(abs(max(numbers) - average), abs(min(numbers) - average))
+    return _max, _max / average
+
+def main():
+    nums = getNum()
+    if len(nums) == 0:
+        print('no data')
+    else:
+        ave = average(nums)
+        devs = rel_dev(nums, ave)
+        print('和:{:.4f},平均数:{:.4f},中位数:{:.4f},方差:{:.4f},绝对误差:{:4f},相对误差:{:.4f}' \
+            .format(sum(nums), ave, median(nums), dev(nums, ave), devs[0], devs[1]))
+
+if __name__ == '__main__':
+    main()
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+小说词频统计
+策略：
+中文小说：使用第三方库jieba切分，统计
+英文小说：去掉特殊干扰字符，直接切分为单词，遍历统计
+统计莎士比亚经典名著：Hamlet。统计最高出现单词。
+def getText():
+    txt = open('novels/hamlet.txt', 'r').read()
+    txt = txt.lower()   # 去掉大小写干扰
+    # 去掉特殊符号干扰
+    for ch in '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\'':
+        txt = txt.replace(ch, ' ')
+    return txt
+
+hamletTxt = getText()
+words = hamletTxt.split()
+counts = {}
+for word in words:
+    counts[word] = counts.get(word, 0) + 1
+items = list(counts.items())
+# 将其按照词出现数量按照降序排列
+items.sort(key = lambda x : x[1], reverse = True)
+
+for i in range(20):
+    word, count = items[i]
+    print('{:^10}{:^10}'.format(word, count))
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+统计名著三国演义中人物名字出现次数：
+其中一个jieba库是一个对中文文本依照汉字间关联概率进行词组划分的第三方库，使用简单，且非常好用，文档在此。
+import jieba
+
+def getWords():
+    txt = open('novels/threekingdoms.txt', 'r', encoding = 'utf-8').read()
+    words = jieba.lcut(txt)
+    counts = {}
+    for word in words:
+        if len(word) == 1:
+            continue
+        else:
+            counts[word] = counts.get(word, 0) + 1
+    word_list = list(counts.items())
+    word_list.sort(key = lambda x : x[1], reverse = True)
+    return word_list
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+进行人肉优化，去掉不是人名的词语，并将一些指同一个人物的词合并到一个人物下。
+import jieba
+
+def countWords(excludes, merges):
+    txt = open('novels/threekingdoms.txt', 'r', encoding = 'utf-8').read()
+    words = jieba.lcut(txt)
+    counts = {}
+    # 取出长度为一的词和符号以及excludes中的词
+    for word in words:
+        if len(word) == 1 or word in excludes:
+            continue
+        else:
+            counts[word] = counts.get(word, 0) + 1
+    # 合并名称相同的人名
+    for merge in merges:
+        for name in merge[1]:
+            counts[merge[0]] += counts.get(name, 0)
+            del counts[name]
+    word_list = list(counts.items())
+    word_list.sort(key = lambda x : x[1], reverse = True)
+    return word_list
+
+
+excludes = {'却说','二人','不可','主公','陛下','汉中','只见','众将','后主','蜀兵','上马','大叫','太守','此人','夫人',
+            '先主','后人','背后','城中','天子','一面','何不','大军','忽报','先生','百姓','何故','不能','如此','如何',
+            '然后','先锋','不如','赶来','原来','令人','江东','下马','喊声','正是','徐州','忽然','荆州','左右','军马',
+            '因此','成都','不见','未知','大败','大事','之后','一军','引军','起兵','军中','接应','引兵','次日','大喜',
+            '进兵','大惊','可以','以为','大怒','不得','心中','下文','一声','追赶','粮草','天下','东吴','于是','都督',
+            '曹兵','一齐','分解','回报','分付','只得','出马','三千','大将','许都','随后','报知','今日','不敢','魏兵',
+            '前面','之兵','且说','众官','洛阳','领兵','商议','军士','星夜','精兵','城上','之计','不肯','相见','其言',
+            '一日','而行','文武','襄阳','准备','若何','出战','亲自','必有','一人','人马','不知','何人','此事','之中',
+            '伏兵','祁山','乘势','忽见','大笑','樊城','兄弟','首级','立于','西川','传令','当先','五百','一彪','坚守',
+            '此时','之间','投降','五千','埋伏','长安','三路','遣使','将军','关兴','军师','朝廷','三军','大王','回见',
+            '大将军','必然','将士','是夜','小路' }
+
+merges = [  ('刘备',('玄德','玄德曰','玄德问','刘玄德','玄德大','玄德自','玄德闻','皇叔','刘皇叔')),
+            ('关羽',('关公','云长','关云长')),
+            ('孔明',('诸葛亮','孔明曰','孔明笑','孔明之','孔明自')),
+            ('曹操',('丞相','孟德','曹公','曹孟德')),
+            ('张飞',('翼德','张翼德'))
+        ]
+
+
+
+word_list = countWords(excludes, merges)
+for i in range(30):
+    word, count = word_list[i]
+    print('{0:^10}{1:{3}^10}{2:^15}'.format(i+1, word, count, chr(12288))) # chr(12288)为中文空格
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+结果如下，当然其中类似将军、英雄、主公、大哥、君这种词语无法判断指的是谁，这里仅统计能够判断的，所以这里只能做一个相对的参考。
+    1     　　　　刘备　　　　     1578      
+    2     　　　　曹操　　　　     1485      
+    3     　　　　孔明　　　　     1485      
+    4     　　　　关羽　　　　      820      
+    5     　　　　张飞　　　　      393      
+    6     　　　　吕布　　　　      300      
+    7     　　　　赵云　　　　      278      
+    8     　　　　孙权　　　　      264      
+    9     　　　 司马懿　　　　     221      
+    10    　　　　周瑜　　　　      217      
+    11    　　　　袁绍　　　　      191      
+    12    　　　　马超　　　　      185      
+    13    　　　　魏延　　　　      180      
+    14    　　　　黄忠　　　　      168      
+    15    　　　　姜维　　　　      151      
+    16    　　　　马岱　　　　      127      
+    17    　　　　庞德　　　　      122      
+    18    　　　　孟获　　　　      122      
+    19    　　　　刘表　　　　      120      
+    20    　　　 夏侯惇　　　　     116      
+    21    　　　　董卓　　　　      114      
+    22    　　　　孙策　　　　      108      
+    23    　　　　鲁肃　　　　      107      
+    24    　　　　徐晃　　　　      97       
+    25    　　 　司马昭　　　　     89       
+    26    　　 　夏侯渊　　　　     88       
+    27    　　　　王平　　　　      88       
+    28    　　　　刘璋　　　　      85       
+    29    　　　　袁术　　　　      84       
+    30    　　　　吕蒙　　　　      83
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+To be continued …
+reference
+中国大学MOOC - 北京理工大学 - 嵩天- Python语言程序设计课程
+
+
+ 
+点赞
+17
+ 
+评论
+
+ 
+分享
+ 
+收藏
+84 
+ 
+手机看 
+ 
+关注
+
+colours2009的博客 
+ 5567 
+9个Python编程小游戏，有趣又好玩，简直太棒了 
+前言学习编程对大多数人来说是枯燥而无聊，大家有时候往往会觉得精神崩溃，提不起学习的兴趣，因此从入门到放弃（笑哭），面临这种困境该怎么办呢？这时候就有一些大牛设计出用游戏来学习编程知识点，所以,这世界上就出现了许多...... 
+Shawn的博客 
+ 18万+ 
+快速入门（完整）：Python实例100个（基于最新Python3.7版本） 
+Python3 100例 原题地址： http://www.runoob.com/python/python-100-examples.html git地址： https://github.com/RichardFu123/Python100Cases 原例为Python2.7版本 重写过程中有不少是随意发挥的 重写运行版本：Python3.7总... 
+
+ 
+ 
+ 
+OraYang的博客 
+ 8万+ 
+手把手教你用python写游戏 
+引言最近python语言大火，除了在科学计算领域python有用武之地之外，在游戏、后台等方面，python也大放异彩，本篇博文将按照正规的项目开发流程，手把手教大家写个python小游戏,项目来自《Python编程从入门到实践》（本文将原项目中的部分错误进行修改完善，PS:强烈推荐这本书，真的很赞），来感受下其中的有趣之处。本次开发的游戏叫做alien invasion。安装pygame...... 
+qq_42238397的博客 
+ 1万+ 
+几个Python小案例，爱上Python编程！ 
+Python是一种面向对象的解释型编程语言，源代码与解释器CPython遵守GPL协议，Python语法简洁清晰。语法简洁清晰，那么我们用少量的Python代码能做哪些有趣的东西？一、画爱心表白1、图形都是由一系列的点(X，Y)构成的曲线，由于X，Y满足一定的关系，所以我们就可以建立模型，建立表达式expression，当满足时，两个for循环（for X in range；f...... 
+Python实例集锦_Python_appke的专栏-CSDN博客
+5-14
+Python实例集锦Python实例之一有四个数字:1、2、3、4,能组成多少个互不相同且无重复数字的三位数?各是多少?使用三次循环for x in range(1,5): for y in ...
+快速入门(完整):Python实例100个(基于最新Python3.7版..._CSDN博客
+6-24
+Python3 100例 原题地址: http://www.runoob.com/python/python-100-examples.html git地址: https://github.com/RichardFu123/Python100Cases 原例为Python2.7...
+Python达人 
+ 1万+ 
+Python能做的5件有趣的事情，你做过几个？ 
+现在Python越来越受程序员欢迎了，程序员用Python可以做哪些有趣的事情呢?下面w3cschool就给小伙伴们介绍一下Python编程的5件趣事：0.for-else用法循环正常结束则执行else语句。一般用于循环找符合条件的元素，如果找到则break调出循环，不会触发else;如果没有找到(完整运行循环)则printnotfound1.or的用法python中x...... 
+weixin_30815427的博客 
+ 1323 
+趣味python编程之经典俄罗斯方块 
+国庆期间闲不住，用python把经典俄罗斯方块实现了一遍，找到了些儿时的乐趣。因此突发奇想，正统编程之余也给自己找点儿乐趣，换个角度写程序。原计划是写篇完整的博文对程序算法和函数模块做个说明，但是在整理程序的时候发现自己给程序加的注释已经相当详细，程序以外的文字显得很多余。正所谓大道至简，直接将程序代码贴上来，大家就着代码、伴着注解，相信对程序的理解应该很容易。配置文件 elsfk.cfg，定...... 
+【Python】python脚本实例_Carson_Chu的学习笔记-CSDN..._CSDN博客
+6-20
+python脚本的实例本文通过一个简单的python脚本实例,来介绍python语法。参数:ip地址,端口号port需求:首先进行ping,如果ping不成功就就进行traceroute如果ping得通就行...
+分享7个python案例,python真的无所不能且容易上手(带源..._CSDN博客
+5-14
+本文共分享七个案例;分别是:完整源码私信小编01获取。1,抓取知乎图片,只用30行代码:学习资料也可以加下Python扣扣裙:3零4零5零799自己下载学习下2、没事闲的...
+蒟蒻乱写的博客 
+ 317 
+【初识python】几个有趣的小实例 
+这次写几个觉得有趣的小实例1.进击の文本记录条利用简单代码实现进度条代码如下：import timescale = 50print("执行开始".center(scale//2, "-"))#开始start = time.perf_counter()for i in range(scale+1):#利用循环实现进度条刷新 a = '*' * i b = '.' * ...... 
+weixin_42668123的博客 
+ 2万+ 
+一些简单好玩的Python编程游戏 
+1）构造王者荣耀英雄介绍“菜单”，编写程序，显示“菜单”，由用户输入代号后，输出对所选英雄的详细介绍代码如下：运行结果如下：只要输入代号后，就会输出对所选英雄的详细介绍2）输入年、月，输出本月有多少天。合理选择分支语句完成设计任务。   输入样例1：20042   输出结果1：本月29天   输入样例2：20104   输出结果2：本月30天...... 
+几个Python小案例,爱上Python编程!_qq_42238397的博客..._CSDN博客
+6-19
+Python是一种面向对象的解释型编程语言,源代码与解释器CPython遵守GPL协议,Python语法简洁清晰。语法简洁清晰,那么我们用少量的Python代码能做哪些有趣的东西?一、画...
+10分钟学会用python写游戏,实例教程_1024小神的博客-CSDN博客
+1-6
+安装pygame本人电脑是windows10、python3.6,pygame下载地址:https:... python小游戏实例之二(2019-09-19) python小游戏实例之二(2019-09-19) 下载 Python小游戏(...
+appke的专栏 
+ 6115 
+Python实例集锦 
+Python实例集锦Python实例之一有四个数字：1、2、3、4，能组成多少个互不相同且无重复数字的三位数？各是多少？使用三次循环for x in range(1,5): for y in range(1,5): for z in range(1,5): if (x != y) and (x != z) and (y != z): ... 
+Python达人 
+ 13万+ 
+十个Python练手的实战项目，学会这些Python就基本没问题了 
+话不多说，直接开搞！练习项目一：即时标记这里还是要推荐下小编的Python学习群:483546416，不管你是小白还是大牛，小编我都欢迎，不定期分享干货，包括小编自己整理的一份2017最新的Python资料和0基础入门教程，欢迎初学和进阶中的小伙伴。在不忙的时间我会给大家解惑。补充utils.py:练习项目二：画幅好画练习项目三：万能的XML练习项目四：新闻聚合练习项目五：虚拟茶话会clinet....... 
+python经典案例_python_Mr Zheng-CSDN博客
+5-31
+1)遍历一个文件下的所有文件夹及文件的名称 import ospath = ../a # D:\\python\\0930\\adef get_file(path): # abspath获取目标文件夹的绝对路径 path...
+Python小例子(一)_Python_望生帝的博客-CSDN博客
+5-5
+1.根据半径r计算圆半径r=25area=3.1415*r*rprint(area)print(&qPython... 快速入门(完整):Python实例100个(基于最新Python3.7版本) Python3 100例 原题地址...
+碎片 
+ 37万+ 
+Python——画一棵漂亮的樱花树（不同种樱花+玫瑰+圣诞树喔） 
+最近翻到一篇知乎，上面有不少用Python（大多是turtle库）绘制的树图，感觉很漂亮，我整理了一下，挑了一些我觉得不错的代码分享给大家（这些我都测试过，确实可以生成）one 樱花树 动态生成樱花效果图（这个是动态的）：实现代码import turtle as Timport randomimport time# 画樱花的躯干(60,t)def Tree(branch, ...... 
+Wang Gangdan的博客 
+ 3万+ 
+有趣的代码：一行Python代码能干嘛？ 
+前言python有很多优雅有趣的代码写法，同时还很简短，以至于当我刚开始接触这个编程语言的时候，就爱不释手。而前几天的编程语言榜单中python也超越了java成为了第一，挺替python开心的。python到底有多有趣呢？一行代码告诉你！正文1)画爱心print('\n'.join([''.join([('WangGangdan'[(x-y)%10]if((x*0...... 
+Python学习初级编程实例(一)_python_喵叫兽的博客-CSDN博客
+5-25
+快速入门(完整):Python实例100个(基于最新Python3.7版本) Python3 100例 原题地址: http://www.runoob.com/python/python-100-examples.html git地址: https...
+介绍十个Python小案例,新手入门就在这里 - qq_41212104的博客...
+11-19
+今天给大家分享十个Python入门级别的小案例。案例一:排列组合要求:将4个数字可能组成的所有互不相同且无重复数字的排列组合列出。分析:排列就好了代码:案例二:阶梯...
+weixin_34352005的博客 
+ 4882 
+搞几款由“Python”语言编写的“有趣、恶搞、好玩”的程序代码！ 
+为提高大家对“Python”编程语言的学习兴趣，今天给大家分享几款有趣的Python程序代码，感兴趣的小伙伴可以跟着学习借鉴哦!进群：839383765可以获取Python学习资料哦！分享一："啥是佩奇?"让Python语言告诉你用Python代码创作一副佩奇：<prestyle="-webkit-tap-highlight-color:transparent;box-sizin...... 
+50个常用的Python库和示例代码 
+05-09
+通过分析github上5000个开源python项目，找出了最常用的库，word文档列举了最常用的前50个，相应代码以网址形式给出，整理非常全面，方便学习。 
+有意思的Python小程序 
+04-11
+用Python实现在微信头像右上角加上红底白字的数字，类似于微信未读信息数量那种提示效果 
+qq_42712463的博客 
+ 1万+ 
+分享7个python案例，python真的无所不能且容易上手（带源码） 
+本文共分享七个案例；分别是：完整源码私信小编01获取。1，抓取知乎图片，只用30行代码：学习资料也可以加下Python扣扣裙：3零4零5零799自己下载学习下2、没事闲的时候，听两个聊天机器人互相聊天：from time import sleepimport requestss = input("请主人输入话题：")while True:resp...... 
+Carson_Chu的学习笔记 
+ 6101 
+【Python】python脚本实例 
+python脚本的实例本文通过一个简单的python脚本实例，来介绍python语法。参数：ip地址，端口号port需求：首先进行ping，如果ping不成功就就进行traceroute如果ping得通就行telnettraceroute的结果要输出最后一跳的地址telnet如果成功输出成功，不成功且失败信息报refused则输出“端口未开启”，如果不成功且失败信息没有报refus...... 
+qqaazzww1234的博客 
+ 3万+ 
+Python有趣小程序代码 
+1：打印心形print('\n'.join([''.join([('Love'[(x-y)%4]if((x*0.05)**2+(y*0.1)**2-1)**3-(x*0.05)**2*(y*0.1)**3&lt;=0else'')forxinrange(-30,30)])foryinrange(15,-15,-1)]))2:9*9乘法表print('\n'.join([''.jo... 
+归零者 
+ 5万+ 
+Python实例大全（基于Python3.7.4） 
+博客说明：这是自己写的有关python语言的一篇综合博客。只作为知识广度和编程技巧学习，不过于追究学习深度，点到即止、会用即可。主要是基础语句，如三大控制语句（顺序、分支、循环），随机数的生成，数据类型的区分和使用；也会涉及常用的算法和数据结构，以及面试题相关经验；主体部分是针对python的数据挖掘和数据分析，主要先攻爬虫方向：正则表达式匹配，常用数据清洗办法，scrapy及其他爬虫框架，数据存储方式及其实现；最后还会粗略涉及人工智能领域，玩转大数据与云计算、进行相关的预测和分析。... 
+Mr Zheng 
+ 2988 
+python经典案例 
+1）遍历一个文件下的所有文件夹及文件的名称 import ospath = '../a' # D:\python\0930\adef get_file(path):    # abspath获取目标文件夹的绝对路径    path = os.path.abspath(path)    # listdir获取指定文件夹中的所有文件和文件夹组成的列表    files = os....... 
+©️2020 CSDN 皮肤主题: 大白 设计师: CSDN官方博客 返回首页 
+关于我们 招聘 广告服务 网站地图 kefu@csdn.net
+
+客服论坛
+
+400-660-0108 
+
+QQ客服（8:30-22:00） 
+公安备案号 11010502030143 京ICP备19004658号 京网文〔2020〕1039-165号 版权与免责声明 版权申诉 网络110报警服务 
+中国互联网举报中心 家长监护 版权申诉 北京互联网违法和不良信息举报中心 ©1999-2020 北京创新乐知网络技术有限公司 
+目录
+drawing with turtle
+文本进度条
+蒙特卡洛方法计算π
+递归绘制Koch雪花曲线
+简单统计
+小说词频统计
+reference
+
+
+分类专栏
+ 
+OJ——POJ
+1篇
+ 
+基本数据结构
+3篇
+ 
+算法——字符串——KMP
+1篇
+ 
+算法——排序
+2篇
+ 
+算法——简单算法
+2篇
+ 
+算法——矩阵
+1篇
+ 
+编程语言——C++
+3篇
+ 
+离散数学
+4篇
+ 
+数据结构——树
+2篇
+ 
+计算机科学
+3篇
+ 
+编程语言
+2篇
+ 
+Linux
+1篇
+ 
+编程基础
+
+ 
+举报
+ 
